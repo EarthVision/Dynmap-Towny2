@@ -20,13 +20,9 @@ import org.dynmap.towny.events.TownRenderEvent;
 import org.dynmap.towny.events.TownSetMarkerIconEvent;
 import org.dynmap.towny.settings.Settings;
 
-import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockType;
-import com.palmergames.bukkit.towny.object.TownBlockTypeCache.CacheType;
-import com.palmergames.bukkit.towny.object.TownyWorld;
+import eu.towny.compatibility.CompatTown;
+import eu.towny.compatibility.CompatNation;
+import eu.towny.compatibility.CompatResident;
 
 public class UpdateTowns implements Runnable {
 
@@ -48,7 +44,7 @@ public class UpdateTowns implements Runnable {
 		Map<String, Marker> newmark = new HashMap<String, Marker>(); /* Build new map */
 
 		/* Loop through towns */
-		for (Town t : TownyAPI.getInstance().getTowns()) {
+		for (CompatTown t : DynmapTownyPlugin.getPlugin().getCompatibilityLayer().getTowns()) {
 			try {
 				handleTown(t, newmap, newmark, null);
 				if (Settings.showingShops() && townHasTBsOfType(t, TownBlockType.COMMERCIAL)) {
@@ -76,12 +72,12 @@ public class UpdateTowns implements Runnable {
 		existingMarkers = newmark;
 	}
 
-	private boolean townHasTBsOfType(Town t, TownBlockType tbType) {
+	private boolean townHasTBsOfType(CompatTown t, TownBlockType tbType) {
 		return t.getTownBlockTypeCache().getNumTownBlocks(tbType, CacheType.ALL) > 0;
 	}
 
 	/* Handle specific town */
-	private void handleTown(Town town, Map<String, AreaMarker> newWorldNameAreaMarkerMap, Map<String, Marker> newWorldNameMarkerMap, TownBlockType btype) throws Exception {
+	private void handleTown(CompatTown town, Map<String, AreaMarker> newWorldNameAreaMarkerMap, Map<String, Marker> newWorldNameMarkerMap, TownBlockType btype) throws Exception {
 		String townName = town.getName();
 		int poly_index = 0; /* Index of polygon for when a town has multiple shapes. */
 
@@ -173,7 +169,7 @@ public class UpdateTowns implements Runnable {
 		drawTownMarkers(town, newWorldNameMarkerMap, townName, infoWindowPopup);
 	}
 
-	private Collection<TownBlock> filterTownBlocks(Town town, TownBlockType btype) {
+	private Collection<TownBlock> filterTownBlocks(CompatTown town, TownBlockType btype) {
 		if (btype == null)
 			return town.getTownBlocks();
 		return town.getTownBlocks().stream()
@@ -181,7 +177,7 @@ public class UpdateTowns implements Runnable {
 				.collect(Collectors.toList());
 	}
 
-	private int traceTownOutline(Town town, Map<String, AreaMarker> newWorldNameMarkerMap, TownBlockType btype, int poly_index,
+	private int traceTownOutline(CompatTown town, Map<String, AreaMarker> newWorldNameMarkerMap, TownBlockType btype, int poly_index,
 			String infoWindowPopup, String worldName, TileFlags ourShape, int minx, int minz) throws Exception {
 
 		double[] x;
@@ -339,7 +335,7 @@ public class UpdateTowns implements Runnable {
 		return true;
 	}
 
-    private void addStyle(Town town, AreaMarker m, TownBlockType btype) {
+    private void addStyle(CompatTown town, AreaMarker m, TownBlockType btype) {
         AreaStyle as = cusstyle.get(town.getName());	/* Look up custom style for town, if any */
         AreaStyle ns = nationstyle.get(getNationNameOrNone(town));	/* Look up nation style, if any */
         
@@ -427,7 +423,7 @@ public class UpdateTowns implements Runnable {
 	 * Town Marker Drawing Methods
 	 */
 
-	private void drawTownMarkers(Town town, Map<String, Marker> newWorldNameMarkerMap, String townName, String desc) {
+	private void drawTownMarkers(CompatTown town, Map<String, Marker> newWorldNameMarkerMap, String townName, String desc) {
 		/* Now, add marker for home block */
 		TownBlock homeBlock = town.getHomeBlockOrNull();
 		
@@ -447,7 +443,7 @@ public class UpdateTowns implements Runnable {
 			drawOutpostIcons(town, newWorldNameMarkerMap, desc);
 	}
 
-	private MarkerIcon getMarkerIcon(Town town) {
+	private MarkerIcon getMarkerIcon(CompatTown town) {
 		if (town.isRuined())
 			return defstyle.getRuinIcon();;
 
@@ -457,7 +453,7 @@ public class UpdateTowns implements Runnable {
 		return town.isCapital() ? defstyle.getCapitalMarker(as, ns) : defstyle.getHomeMarker(as, ns);
 	}
 
-	private String getNationNameOrNone(Town town) {
+	private String getNationNameOrNone(CompatTown town) {
 		return town.hasNation() ? town.getNationOrNull().getName() : "_none_";
 	}
 
@@ -481,7 +477,7 @@ public class UpdateTowns implements Runnable {
 		newWorldNameMarkerMap.put(markid, home);
 	}
 
-	private void drawOutpostIcons(Town town, Map<String, Marker> newWorldNameMarkerMap, String desc) {
+	private void drawOutpostIcons(CompatTown town, Map<String, Marker> newWorldNameMarkerMap, String desc) {
 		MarkerIcon outpostIco = Settings.getOutpostIcon();
 		int i = 0;
 		for (Location loc : town.getAllOutpostSpawns()) {

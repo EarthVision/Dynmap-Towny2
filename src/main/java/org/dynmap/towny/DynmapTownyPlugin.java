@@ -21,16 +21,11 @@ import org.dynmap.towny.mapupdate.AreaStyleHolder;
 import org.dynmap.towny.mapupdate.UpdateTowns;
 import org.dynmap.towny.settings.Settings;
 
-import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
-import com.palmergames.bukkit.towny.scheduling.TaskScheduler;
-import com.palmergames.bukkit.towny.scheduling.impl.BukkitTaskScheduler;
-import com.palmergames.bukkit.towny.scheduling.impl.FoliaTaskScheduler;
+import eu.towny.Towny;
+import eu.towny.compatibility.CompatibilityLayer;
+import eu.towny.compatibility.CompatTown;
+import eu.towny.compatibility.CompatNation;
+import eu.towny.compatibility.CompatResident;
 
 public class DynmapTownyPlugin extends JavaPlugin {
 	
@@ -45,6 +40,9 @@ public class DynmapTownyPlugin extends JavaPlugin {
 	private MarkerSet markerSet;
 	private Map<String, AreaMarker> areaMarkers = new HashMap<String, AreaMarker>();
 	private Map<String, Marker> markers = new HashMap<String, Marker>();
+
+	private Towny townyPlugin;
+	private CompatibilityLayer compatLayer;
 
 	public DynmapTownyPlugin() {
 		this.scheduler = isFoliaClassPresent() ? new FoliaTaskScheduler(this) : new BukkitTaskScheduler(this);
@@ -72,14 +70,17 @@ public class DynmapTownyPlugin extends JavaPlugin {
 		}
 
 		/* Get Towny */
-		towny = pm.getPlugin("Towny");
+		towny = pm.getPlugin("Towny2");
 		if (towny == null || !towny.isEnabled()) {
-			severe("Cannot find Towny, check your logs to see if it enabled properly?!");
+			severe("Cannot find Towny2, check your logs to see if it enabled properly?!");
 			return;
 		}
 
 		/* Get DynmapAPI */
 		dynmapAPI = (DynmapAPI) dynmap;
+
+		townyPlugin = (Towny) towny;
+		compatLayer = townyPlugin.getCompatibilityLayer();
 
 		// Make sure the Towny version is new enough.
 		if (!townyVersionCheck()) {
@@ -199,7 +200,7 @@ public class DynmapTownyPlugin extends JavaPlugin {
 
 	private boolean townyVersionCheck() {
 		try {
-			return Towny.isTownyVersionSupported(requiredTownyVersion);
+			return compatLayer.isTownyVersionSupported(requiredTownyVersion);
 		} catch (NoSuchMethodError e) {
 			return false;
 		}
@@ -235,19 +236,19 @@ public class DynmapTownyPlugin extends JavaPlugin {
 
 	private class TownyUpdate implements Runnable {
 		public void run() {
-			if (TownyUniverse.getInstance().getDataSource() != null) {
+			if (compatLayer != null) {
 				scheduler.runAsync(townUpdater);
 
 				if (Settings.getPlayerVisibilityByTown())
-					TownyAPI.getInstance().getTowns().forEach(t -> updateTown(t));
+					compatLayer.getTowns().forEach(t -> updateTown(t));
 
 				if (Settings.getPlayerVisibilityByNation())
-					TownyAPI.getInstance().getNations().forEach(n -> updateNation(n));
+					compatLayer.getNations().forEach(n -> updateNation(n));
 			}
 		}
 	}
 
-	private void updateTown(Town town) {
+	private void updateTown(CompatTown town) {
 		Set<String> plids = town.getResidents().stream().map(r -> r.getName()).collect(Collectors.toSet());
 		String setid = "towny.town." + town.getName();
 		PlayerSet set = markerAPI.getPlayerSet(setid); /* See if set exists */
@@ -259,8 +260,11 @@ public class DynmapTownyPlugin extends JavaPlugin {
 		set.setPlayers(plids);
 	}
 
-	private void updateNation(Nation nat) {
-		Set<String> plids = nat.getResidents().stream().map(r -> r.getName()).collect(Collectors.toSet());
+	private void updateNation(CompatNation nat) {
+		Set<String> plids = nat.getTowns().stream()
+			.flatMap(t -> t.getResidents().stream())
+			.map(r -> r.getName())
+			.collect(Collectors.toSet());
 		String setid = "towny.nation." + nat.getName();
 		PlayerSet set = markerAPI.getPlayerSet(setid); /* See if set exists */
 		if (set == null) {
