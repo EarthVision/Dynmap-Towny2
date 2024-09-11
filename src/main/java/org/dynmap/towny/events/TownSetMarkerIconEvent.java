@@ -1,11 +1,12 @@
 package org.dynmap.towny.events;
 
-import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.dynmap.markers.MarkerIcon;
 import org.jetbrains.annotations.NotNull;
+
+import eu.towny.compatibility.CompatTown;
 
 /**
  * Event called when the marker icon for a town is chosen.
@@ -13,16 +14,16 @@ import org.jetbrains.annotations.NotNull;
 public class TownSetMarkerIconEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
-    private final Town town;
+    private final CompatTown town;
     private MarkerIcon icon;
 
-    public TownSetMarkerIconEvent(Town town, MarkerIcon icon) {
+    public TownSetMarkerIconEvent(CompatTown town, MarkerIcon icon) {
         super(!Bukkit.getServer().isPrimaryThread());
         this.town = town;
         this.icon = icon;
     }
 
-    public Town getTown() {
+    public CompatTown getTown() {
         return town;
     }
 
