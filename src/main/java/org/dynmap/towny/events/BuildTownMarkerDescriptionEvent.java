@@ -6,7 +6,7 @@ import org.bukkit.event.HandlerList;
 import org.dynmap.towny.mapupdate.TownInfoWindow;
 import org.jetbrains.annotations.NotNull;
 
-import eu.towny.compatibility.CompatTown;
+import eu.towny.api.compatibility.CompatTown;
 
 public class BuildTownMarkerDescriptionEvent extends Event {
 
