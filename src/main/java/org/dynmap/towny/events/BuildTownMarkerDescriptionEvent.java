@@ -1,25 +1,26 @@
 package org.dynmap.towny.events;
 
-import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.dynmap.towny.mapupdate.TownInfoWindow;
 import org.jetbrains.annotations.NotNull;
 
+import eu.towny.compatibility.CompatTown;
+
 public class BuildTownMarkerDescriptionEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
-    private final Town town;
+    private final CompatTown town;
     private String description;
 
-    public BuildTownMarkerDescriptionEvent(Town town) {
+    public BuildTownMarkerDescriptionEvent(CompatTown town) {
         super(!Bukkit.getServer().isPrimaryThread());
         this.town = town;
         this.description = TownInfoWindow.formatInfoWindow(town);
     }
 
-    public Town getTown() {
+    public CompatTown getTown() {
         return town;
     }
 
