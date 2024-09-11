@@ -420,8 +420,8 @@ public class UpdateTowns implements Runnable {
         return town.isCapital() ? defstyle.getCapitalMarker(as, ns) : defstyle.getHomeMarker(as, ns);
     }
 
-    private String getNationNameOrNone(CompatTown town) {
-        return town.hasNation() ? town.getNationOrNull().getName() : "_none_";
+        private String getNationNameOrNone(CompatTown town) {
+        return town.hasNation() ? town.getNation().getName() : "_none_";
     }
 
     private void drawHomeBlockSpawn(Map<String, Marker> newWorldNameMarkerMap, String townName, String desc, String homeblock, MarkerIcon ico) {
