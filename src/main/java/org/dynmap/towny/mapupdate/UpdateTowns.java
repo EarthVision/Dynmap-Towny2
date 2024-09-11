@@ -313,7 +313,7 @@ public class UpdateTowns implements Runnable {
         AreaStyle ns = nationstyle.get(getNationNameOrNone(town));    /* Look up nation style, if any */
         
         m.setLineStyle(defstyle.getStrokeWeight(as, ns), defstyle.getStrokeOpacity(as, ns), defstyle.getStrokeColor(as, ns));
-        m.setFillStyle(defstyle.getFillOpacity(as, ns), defstyle.getFillColor(as, ns));
+        m.setFillStyle(defstyle.getFillOpacity(as, ns), defstyle.getFillColor(as, ns, town, null));
         double y = defstyle.getY(as, ns);
         m.setRangeY(y, y);
         m.setBoostFlag(defstyle.getBoost(as, ns));
