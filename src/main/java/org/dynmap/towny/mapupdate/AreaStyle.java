@@ -169,69 +169,15 @@ public class AreaStyle {
             return 3;
     }
 
-    public int getFillColor(CompatTown town, String plotType) {
-        switch (plotType) {
-            case "COMMERCIAL":
-                return fillcolor_shops;
-            case "ARENA":
-                return fillcolor_arenas;
-            case "EMBASSY":
-                return fillcolor_embassies;
-            case "WILDS":
-                return fillcolor_wilds;
-            default:
-                return -1;
-        }
-    }
-
-    public int getFillColor(AreaStyle cust, AreaStyle nat, CompatTown town, String plotType) {
-        switch (plotType) {
-            case "COMMERCIAL":
-                if ((cust != null) && (cust.fillcolor_shops >= 0))
-                    return cust.fillcolor_shops;
-                else if ((nat != null) && (nat.fillcolor_shops >= 0))
-                    return nat.fillcolor_shops;
-                else if (fillcolor_shops >= 0)
-                    return fillcolor_shops;
-                else
-                    return 0xFF0000;
-            case "ARENA":
-                if ((cust != null) && (cust.fillcolor_arenas >= 0))
-                    return cust.fillcolor_arenas;
-                else if ((nat != null) && (nat.fillcolor_arenas >= 0))
-                    return nat.fillcolor_arenas;
-                else if (fillcolor_arenas >= 0)
-                    return fillcolor_arenas;
-                else
-                    return 0xFF0000;
-            case "EMBASSY":
-                if ((cust != null) && (cust.fillcolor_embassies >= 0))
-                    return cust.fillcolor_embassies;
-                else if ((nat != null) && (nat.fillcolor_embassies >= 0))
-                    return nat.fillcolor_embassies;
-                else if (fillcolor_embassies >= 0)
-                    return fillcolor_embassies;
-                else
-                    return 0xFF0000;
-            case "WILDS":
-                if ((cust != null) && (cust.fillcolor_wilds >= 0))
-                    return cust.fillcolor_wilds;
-                else if ((nat != null) && (nat.fillcolor_wilds >= 0))
-                    return nat.fillcolor_wilds;
-                else if (fillcolor_wilds >= 0)
-                    return fillcolor_wilds;
-                else
-                    return 0xFF0000;
-            default:
-                if ((cust != null) && (cust.fillcolor >= 0))
-                    return cust.fillcolor;
-                else if ((nat != null) && (nat.fillcolor >= 0))
-                    return nat.fillcolor;
-                else if (fillcolor >= 0)
-                    return fillcolor;
-                else
-                    return 0xFF0000;
-        }
+    public int getFillColor(AreaStyle cust, AreaStyle nat, CompatTown town) {
+        if ((cust != null) && (cust.fillcolor >= 0))
+            return cust.fillcolor;
+        else if ((nat != null) && (nat.fillcolor >= 0))
+            return nat.fillcolor;
+        else if (fillcolor >= 0)
+            return fillcolor;
+        else
+            return 0xFF0000; // Default to red
     }
 
     public double getFillOpacity(AreaStyle cust, AreaStyle nat) {

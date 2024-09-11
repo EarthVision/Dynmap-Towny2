@@ -41,35 +41,46 @@ public class UpdateTowns implements Runnable {
 
     @Override
     public void run() {
+        plugin.getLogger().info("UpdateTowns.run() started");
         Map<String, AreaMarker> newmap = new HashMap<String, AreaMarker>(); /* Build new map */
         Map<String, Marker> newmark = new HashMap<String, Marker>(); /* Build new map */
 
         /* Loop through towns */
+        plugin.getLogger().info("Number of towns: " + plugin.getCompatibilityLayer().getTowns().size());
         for (CompatTown t : plugin.getCompatibilityLayer().getTowns()) {
             try {
+                plugin.getLogger().info("Processing town: " + t.getName());
                 handleTown(t, newmap, newmark);
             } catch (Exception e) {
-                plugin.getLogger().info(e.getMessage());
+                plugin.getLogger().severe("Error processing town " + t.getName() + ": " + e.getMessage());
+                e.printStackTrace();
             }
         }
         /* Now, review old maps - anything left is removed */
+        plugin.getLogger().info("Removing old markers");
         existingAreaMarkers.values().forEach(a -> a.deleteMarker());
         existingMarkers.values().forEach(m -> m.deleteMarker());
 
         /* And replace with new map */
+        plugin.getLogger().info("Replacing with new markers");
         existingAreaMarkers = newmap;
         existingMarkers = newmark;
+        plugin.getLogger().info("UpdateTowns.run() completed");
     }
 
     /* Handle specific town */
     private void handleTown(CompatTown town, Map<String, AreaMarker> newWorldNameAreaMarkerMap, Map<String, Marker> newWorldNameMarkerMap) throws Exception {
         String townName = town.getName();
+        plugin.getLogger().info("Handling town: " + townName);
         int poly_index = 0; /* Index of polygon for when a town has multiple shapes. */
 
         /* Get the Town's Chunks */
         Collection<String> townChunks = town.getChunks();
-        if (townChunks.isEmpty())
+        plugin.getLogger().info("Town " + townName + " has " + townChunks.size() + " chunks");
+        if (townChunks.isEmpty()) {
+            plugin.getLogger().info("Town " + townName + " has no chunks, skipping");
             return;
+        }
 
         /* Build popup */
         BuildTownMarkerDescriptionEvent event = new BuildTownMarkerDescriptionEvent(town);
@@ -83,7 +94,15 @@ public class UpdateTowns implements Runnable {
         boolean vis = false;
         /* Loop through chunks: set flags on blockmaps for worlds */
         for(String chunkStr : chunksToDraw) {
+            if (chunkStr == null) {
+                plugin.getLogger().warning("Null chunk string found for town " + townName + ", skipping");
+                continue;
+            }
             String[] parts = chunkStr.split(":");
+            if (parts.length != 3) {
+                plugin.getLogger().warning("Invalid chunk string format for town " + townName + ": " + chunkStr + ", skipping");
+                continue;
+            }
             String worldName = parts[0];
             int chunkX = Integer.parseInt(parts[1]);
             int chunkZ = Integer.parseInt(parts[2]);
@@ -111,7 +130,15 @@ public class UpdateTowns implements Runnable {
             int minz = Integer.MAX_VALUE;
             String ourWorld = null;
             for(String chunkStr : chunksToDraw) {
+                if (chunkStr == null) {
+                    plugin.getLogger().warning("Null chunk string found for town " + townName + ", skipping");
+                    continue;
+                }
                 String[] parts = chunkStr.split(":");
+                if (parts.length != 3) {
+                    plugin.getLogger().warning("Invalid chunk string format for town " + townName + ": " + chunkStr + ", skipping");
+                    continue;
+                }
                 String worldName = parts[0];
                 int chunkX = Integer.parseInt(parts[1]);
                 int chunkZ = Integer.parseInt(parts[2]);
@@ -309,11 +336,17 @@ public class UpdateTowns implements Runnable {
     }
 
     private void addStyle(CompatTown town, AreaMarker m) {
-        AreaStyle as = cusstyle.get(town.getName());    /* Look up custom style for town, if any */
-        AreaStyle ns = nationstyle.get(getNationNameOrNone(town));    /* Look up nation style, if any */
+        plugin.getLogger().info("Adding style for town: " + town.getName());
+        AreaStyle as = cusstyle.get(town.getName());
+        AreaStyle ns = nationstyle.get(getNationNameOrNone(town));
         
         m.setLineStyle(defstyle.getStrokeWeight(as, ns), defstyle.getStrokeOpacity(as, ns), defstyle.getStrokeColor(as, ns));
-        m.setFillStyle(defstyle.getFillOpacity(as, ns), defstyle.getFillColor(as, ns, town, null));
+        
+        int fillColor = defstyle.getFillColor(as, ns, town);
+        plugin.getLogger().info("Fill color for town " + town.getName() + ": " + Integer.toHexString(fillColor));
+        
+        m.setFillStyle(defstyle.getFillOpacity(as, ns), fillColor);
+        
         double y = defstyle.getY(as, ns);
         m.setRangeY(y, y);
         m.setBoostFlag(defstyle.getBoost(as, ns));
@@ -334,7 +367,7 @@ public class UpdateTowns implements Runnable {
                 if (Settings.usingDynamicTownColours()) {
                     //Here we know the server is using town colors. This takes top priority for fill
                     colorHexCode = town.getMapColorHexCode();              
-                    if(!colorHexCode.isEmpty()) {
+                    if(colorHexCode != null && !colorHexCode.isEmpty()) {
                         //If town has a color, use it
                         townFillColorInteger = Integer.parseInt(colorHexCode, 16);
                         townBorderColorInteger = townFillColorInteger;
@@ -359,7 +392,7 @@ public class UpdateTowns implements Runnable {
                 } else {
                     //Here we know the server is using town colors
                     colorHexCode = town.getMapColorHexCode();              
-                    if(!colorHexCode.isEmpty()) {
+                    if(colorHexCode != null && !colorHexCode.isEmpty()) {
                         //If town has a color, use it
                         townBorderColorInteger = Integer.parseInt(colorHexCode, 16);                
                     }                
@@ -380,7 +413,9 @@ public class UpdateTowns implements Runnable {
                     m.setLineStyle(strokeWeight, strokeOpacity, townBorderColorInteger);
                 }   
 
-            } catch (Exception ex) {}
+            } catch (Exception ex) {
+                plugin.getLogger().warning("Error setting dynamic colors for town " + town.getName() + ": " + ex.getMessage());
+            }
         }
     }
 

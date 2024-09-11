@@ -199,13 +199,40 @@ public class DynmapTownyPlugin extends JavaPlugin {
         @Override
         public void run() {
             if (compatLayer != null) {
-                townUpdater.run();
+                try {
+                    LOG.info("Starting townUpdater.run()");
+                    townUpdater.run();
+                    LOG.info("Completed townUpdater.run()");
+                } catch (Exception e) {
+                    LOG.severe("Error in townUpdater.run(): " + e.getMessage());
+                    e.printStackTrace();
+                }
 
-                if (Settings.getPlayerVisibilityByTown())
-                    compatLayer.getTowns().forEach(DynmapTownyPlugin.this::updateTown);
+                if (Settings.getPlayerVisibilityByTown()) {
+                    LOG.info("Processing player visibility by town");
+                    compatLayer.getTowns().forEach(town -> {
+                        try {
+                            LOG.info("Updating town: " + town.getName());
+                            updateTown(town);
+                        } catch (Exception e) {
+                            LOG.severe("Error updating town " + town.getName() + ": " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                    });
+                }
 
-                if (Settings.getPlayerVisibilityByNation())
-                    compatLayer.getNations().forEach(DynmapTownyPlugin.this::updateNation);
+                if (Settings.getPlayerVisibilityByNation()) {
+                    LOG.info("Processing player visibility by nation");
+                    compatLayer.getNations().forEach(nation -> {
+                        try {
+                            LOG.info("Updating nation: " + nation.getName());
+                            updateNation(nation);
+                        } catch (Exception e) {
+                            LOG.severe("Error updating nation " + nation.getName() + ": " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                    });
+                }
             }
         }
     }
