@@ -3,6 +3,6 @@ main: org.dynmap.towny.DynmapTownyPlugin
 version: ${project.version}
 author: LlmDl
 api-version: 1.14
-depend: [ dynmap, Towny ]
+depend: [ dynmap, Towny2 ]
 softdepend: [ TownyChat ]
 folia-supported: true

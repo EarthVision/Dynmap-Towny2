@@ -1,0 +1,65 @@
+version:
+  version: "1.1.2"
+
+update:
+  period: 300
+
+layer:
+  name: "Towny"
+  hidebydefault: false
+  layerprio: 2
+  minzoom: 0
+
+player_visibility:
+  visibility-by-town: true
+  visibility-by-nation: true
+
+townblock_colours:
+  shops:
+    showShops: false
+    fillColour: "#0000FF"
+  arenas:
+    showArenas: false
+    fillColour: "#FF00FF"
+  embassies:
+    showEmbassies: false
+    fillColour: "#00FFFF"
+  wilds:
+    showWilds: false
+    fillColour: "#00FF00"
+
+dynamic_colours:
+  town_colours: true
+  nation_colours: true
+
+infowindow:
+  town_info_window: "<div class=\"infowindow\"><span style=\"font-size:120%;\">%regionname% (%nation%)</span><br /> Mayor <span style=\"font-weight:bold;\">%playerowners%</span><br /> Associates <span style=\"font-weight:bold;\">%playermanagers%</span><br/>Flags<br /><span style=\"font-weight:bold;\">%flags%</span></div>"
+  noNationSlug: ""
+
+regionstyle:
+  strokeColor: "#FF0000"
+  strokeOpacity: 0.8
+  strokeWeight: 3
+  fillColor: "#FF0000"
+  fillOpacity: 0.35
+  boost: false
+  icons:
+    homeIcon: "blueflag"
+    capitalIcon: "king"
+    outpostIcon: "tower"
+    ruinIcon: "warning"
+
+visibleregions: []
+
+hiddenregions: []
+
+custstyle: {}
+
+nationstyle: {}
+
+chat:
+  sendlogin: true
+  sendquit: true
+  format: "&color;2[WEB] %playername%: &color;f%message%"
+
+language: "english.yml"

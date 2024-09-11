@@ -96,6 +96,8 @@ public class DynmapTownyPlugin extends JavaPlugin {
     }
 
     private boolean loadConfig() {
+        saveDefaultConfig();
+        reloadConfig();
         try {
             Settings.loadConfig();
         } catch (Exception e) {
