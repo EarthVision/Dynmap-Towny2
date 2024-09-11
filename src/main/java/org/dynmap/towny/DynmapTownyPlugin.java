@@ -200,19 +200,17 @@ public class DynmapTownyPlugin extends JavaPlugin {
         public void run() {
             if (compatLayer != null) {
                 try {
-                    LOG.info("Starting townUpdater.run()");
+                    //LOG.info("Starting townUpdater.run()");
                     townUpdater.run();
-                    LOG.info("Completed townUpdater.run()");
+                    //LOG.info("Completed townUpdater.run()");
                 } catch (Exception e) {
                     LOG.severe("Error in townUpdater.run(): " + e.getMessage());
                     e.printStackTrace();
                 }
 
                 if (Settings.getPlayerVisibilityByTown()) {
-                    LOG.info("Processing player visibility by town");
                     compatLayer.getTowns().forEach(town -> {
                         try {
-                            LOG.info("Updating town: " + town.getName());
                             updateTown(town);
                         } catch (Exception e) {
                             LOG.severe("Error updating town " + town.getName() + ": " + e.getMessage());
@@ -222,10 +220,8 @@ public class DynmapTownyPlugin extends JavaPlugin {
                 }
 
                 if (Settings.getPlayerVisibilityByNation()) {
-                    LOG.info("Processing player visibility by nation");
                     compatLayer.getNations().forEach(nation -> {
                         try {
-                            LOG.info("Updating nation: " + nation.getName());
                             updateNation(nation);
                         } catch (Exception e) {
                             LOG.severe("Error updating nation " + nation.getName() + ": " + e.getMessage());
@@ -243,7 +239,6 @@ public class DynmapTownyPlugin extends JavaPlugin {
         PlayerSet set = markerAPI.getPlayerSet(setid);
         if (set == null) {
             set = markerAPI.createPlayerSet(setid, true, plids, false);
-            LOG.info("Added player visibility set '" + setid + "' for town " + town.getName());
             return;
         }
         set.setPlayers(plids);
@@ -258,7 +253,6 @@ public class DynmapTownyPlugin extends JavaPlugin {
         PlayerSet set = markerAPI.getPlayerSet(setid);
         if (set == null) {
             set = markerAPI.createPlayerSet(setid, true, plids, false);
-            LOG.info("Added player visibility set '" + setid + "' for nation " + nat.getName());
             return;
         }
         set.setPlayers(plids);
