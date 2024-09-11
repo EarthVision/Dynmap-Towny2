@@ -1,27 +1,28 @@
 package org.dynmap.towny.events;
 
-import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.dynmap.markers.AreaMarker;
 import org.jetbrains.annotations.NotNull;
 
+import eu.towny.compatibility.CompatTown;
+
 /**
  * Called when Dynmap-Towny has made a town which will be rendered.
  */
 public class TownRenderEvent extends Event {
     private static HandlerList handlers = new HandlerList();
-    private final Town town;
+    private final CompatTown town;
     private final AreaMarker areaMarker;
 
-    public TownRenderEvent(Town town, AreaMarker areaMarker) {
+    public TownRenderEvent(CompatTown town, AreaMarker areaMarker) {
         super(!Bukkit.getServer().isPrimaryThread());
         this.town = town;
         this.areaMarker = areaMarker;
     }
 
-    public Town getTown() {
+    public CompatTown getTown() {
         return town;
     }
 
