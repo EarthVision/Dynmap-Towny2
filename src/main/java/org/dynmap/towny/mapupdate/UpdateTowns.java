@@ -20,10 +20,10 @@ import org.dynmap.towny.events.TownRenderEvent;
 import org.dynmap.towny.events.TownSetMarkerIconEvent;
 import org.dynmap.towny.settings.Settings;
 
-import eu.towny.api.compatibility.CompatTown;
-import eu.towny.api.compatibility.CompatNation;
-import eu.towny.api.compatibility.CompatResident;
-import eu.towny.Towny;
+import eu.towny2.api.compatibility.CompatTown;
+import eu.towny2.api.compatibility.CompatNation;
+import eu.towny2.api.compatibility.CompatResident;
+import eu.towny2.Towny;
 
 public class UpdateTowns implements Runnable {
 

@@ -20,11 +20,11 @@ import org.dynmap.towny.mapupdate.AreaStyleHolder;
 import org.dynmap.towny.mapupdate.UpdateTowns;
 import org.dynmap.towny.settings.Settings;
 
-import eu.towny.Towny;
-import eu.towny.api.compatibility.CompatNation;
-import eu.towny.api.compatibility.CompatResident;
-import eu.towny.api.compatibility.CompatTown;
-import eu.towny.api.compatibility.CompatibilityLayer;
+import eu.towny2.Towny;
+import eu.towny2.api.compatibility.CompatNation;
+import eu.towny2.api.compatibility.CompatResident;
+import eu.towny2.api.compatibility.CompatTown;
+import eu.towny2.api.compatibility.CompatibilityLayer;
 
 public class DynmapTownyPlugin extends JavaPlugin {
     

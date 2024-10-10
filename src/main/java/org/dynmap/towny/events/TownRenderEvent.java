@@ -6,7 +6,7 @@ import org.bukkit.event.HandlerList;
 import org.dynmap.markers.AreaMarker;
 import org.jetbrains.annotations.NotNull;
 
-import eu.towny.api.compatibility.CompatTown;
+import eu.towny2.api.compatibility.CompatTown;
 
 /**
  * Called when Dynmap-Towny has made a town which will be rendered.

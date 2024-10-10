@@ -8,8 +8,8 @@ import org.bukkit.Bukkit;
 import org.dynmap.towny.events.BuildTownFlagsEvent;
 import org.dynmap.towny.settings.Settings;
 
-import eu.towny.api.compatibility.CompatResident;
-import eu.towny.api.compatibility.CompatTown;
+import eu.towny2.api.compatibility.CompatResident;
+import eu.towny2.api.compatibility.CompatTown;
 
 public class TownInfoWindow {
 

@@ -7,7 +7,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-import eu.towny.api.compatibility.CompatTown;
+import eu.towny2.api.compatibility.CompatTown;
 
 /**
  * Called when building town flags for display on the dynmap

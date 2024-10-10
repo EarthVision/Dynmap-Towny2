@@ -6,7 +6,7 @@ import org.dynmap.markers.MarkerIcon;
 import org.dynmap.towny.DynmapTownyPlugin;
 import org.dynmap.towny.settings.Settings;
 
-import eu.towny.api.compatibility.CompatTown;
+import eu.towny2.api.compatibility.CompatTown;
 
 public class AreaStyle {
     int strokecolor;

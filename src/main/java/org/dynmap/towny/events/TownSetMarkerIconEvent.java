@@ -6,7 +6,7 @@ import org.bukkit.event.HandlerList;
 import org.dynmap.markers.MarkerIcon;
 import org.jetbrains.annotations.NotNull;
 
-import eu.towny.api.compatibility.CompatTown;
+import eu.towny2.api.compatibility.CompatTown;
 
 /**
  * Event called when the marker icon for a town is chosen.
