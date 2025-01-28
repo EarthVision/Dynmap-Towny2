@@ -413,7 +413,8 @@ public class UpdateTowns implements Runnable {
         /* Now, add marker for home block */
         String homeblock = town.getHomeblock();
         
-        if (homeblock != null && isVisible(townName, homeblock.split(":")[0])) {
+        // Skip homeblock marker if homeblock is null or empty
+        if (homeblock != null && !homeblock.isEmpty() && isVisible(townName, homeblock.split(":")[0])) {
             MarkerIcon townHomeBlockIcon = getMarkerIcon(town);
 
             /* Fire an event allowing other plugins to alter the MarkerIcon */
