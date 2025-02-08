@@ -41,15 +41,15 @@ public class TownInfoWindow {
         v = v.replace("%residentdisplaynames%", dispNames);
 
         v = v.replace("%residentcount%", String.valueOf(town.getResidents().size()));
-        v = v.replace("%founded%", town.getFoundedDate());
-        v = v.replace("%board%", town.getBoard());
+        v = v.replace("%founded%", town.getFoundedDate() != null ? town.getFoundedDate() : "Unknown"); //seems to be returning null sometimes, should not be null right?
+        v = v.replace("%board%", town.getBoard() != null ? town.getBoard() : "");
         v = v.replace("%towntrusted%", town.getTrustedResidents().isEmpty() ? "None" : 
             town.getTrustedResidents().stream().map(CompatResident::getName).collect(Collectors.joining(", ")));
 
         if (town.isUsingEconomy()) {
-            v = v.replace("%tax%", town.getTaxes());
-            v = v.replace("%bank%", town.getBankBalance());
-            v = v.replace("%upkeep%", town.getUpkeep());
+            v = v.replace("%tax%", town.getTaxes() != null ? town.getTaxes() : "0"); //seems to be returning null sometimes, should not be null?
+            v = v.replace("%bank%", town.getBankBalance() != null ? town.getBankBalance() : "0"); //seems to be returning null sometimes, should not be null?
+            v = v.replace("%upkeep%", town.getUpkeep() != null ? town.getUpkeep() : "0"); //seems to be returning null sometimes, should not be null?
         }
 
         String nation = town.getNation() != null ? town.getNation().getName() : Settings.noNationSlug();
