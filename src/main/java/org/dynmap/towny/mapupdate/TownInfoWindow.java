@@ -15,7 +15,7 @@ public class TownInfoWindow {
 
     public static String formatInfoWindow(CompatTown town) {
         String v = "<div class=\"regioninfo\">" + Settings.getTownInfoWindow() + "</div>";
-        v = v.replace("%regionname%", town.getName());
+        v = v.replace("%regionname%", town.getName() != null ? town.getName() : "Unknown");
         v = v.replace("%playerowners%", town.getMayor() != null ? town.getMayor().getName() : "");
         
         List<String> residentNames = town.getResidents().stream()
